@@ -1,0 +1,12 @@
+.colorfull { 
+    background: linear-gradient(45deg, #2196f3, #e91e63);
+}
+
+.icons img {
+    width: 2em;
+    opacity: 50%;
+}
+
+.icons img:hover {
+    opacity: 100%;
+}
