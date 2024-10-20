@@ -1,15 +1,18 @@
-import { useState, useRef} from "react";
+import { useState, useRef, useContext} from "react";
 import { updateUser } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import "../styles/TU-style.css";
+import "./Profile.css";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Profile() {
   const navigate = useNavigate(); // Inizializza useNavigate
+  const { logout } = useContext(AuthContext);
 
   const [profileData, setProfileData] = useState({
     imageUrl: "/assets/images/gufopunk.jpg",
-    username: "utente_username",
-    email: "utente@example.com",
+    username: sessionStorage.getItem("username"),
+    email: sessionStorage.getItem("email"),
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -88,7 +91,7 @@ export default function Profile() {
   const handleConfirmLogout = async () => {
     try {
       // Implement logout functionality (e.g., clear session storage)
-      console.log("Logout effettuato");
+      logout();
       setShowPopup(false);
       navigate("/login"); // Reindirizza alla pagina di login
     } catch {
@@ -144,11 +147,6 @@ export default function Profile() {
           <div className="mb-4">
             <label className="block mb-2">Email:</label>
             <p className="text-gray-300">{profileData.email}</p>
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-2">Password:</label>
-            <p className="text-gray-300">******</p>
           </div>
 
           <div className="icons flex justify-between mt-4">

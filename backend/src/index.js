@@ -108,42 +108,6 @@ app.post('/login', async (req, res) => {
 // Proteggi le rotte successive con l'autenticazione JWT
 app.use(authenticateToken);
 
-// Aggiornamento utente
-app.put('/user', async (req, res) => {
-  const { nome, cognome, data_nascita, sesso, username } = req.body;
-
-  try {
-    const sql = `UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, sesso = ?, username = ? WHERE id = ?`;
-    const result = await db.promise().query(sql, [nome, cognome, data_nascita, sesso, username, req.userId]);
-
-    if (result[0].affectedRows === 0) {
-      return res.status(404).json({ message: 'Utente non trovato.' });
-    }
-
-    res.status(200).json({ message: 'Utente aggiornato con successo.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Errore durante l\'aggiornamento dell\'utente.' });
-  }
-});
-
-// Eliminazione utente
-app.delete('/user/delete', async (req, res) => {  // Modificata la rotta per eliminare
-  try {
-    const sql = `DELETE FROM utente WHERE id = ?`;
-    const result = await db.promise().query(sql, [req.userId]);
-
-    if (result[0].affectedRows === 0) {
-      return res.status(404).json({ message: 'Utente non trovato.' });
-    }
-
-    res.status(200).json({ message: 'Utente eliminato con successo.' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Errore durante l\'eliminazione dell\'utente.' });
-  }
-});
-
 // Importa e usa le rotte dei post
 const postRoutes = require('./routes/postRoutes')(db);
 app.use('/posts', postRoutes);

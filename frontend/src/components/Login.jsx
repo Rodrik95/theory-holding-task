@@ -1,12 +1,13 @@
 import "../styles/TU-style.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(""); // Stato per messaggi di errore
-  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,13 +24,10 @@ export default function Login() {
 
       const data = await response.json();
 
-      sessionStorage.setItem("token", data.token);
-
       if (!response.ok) {
         setError(data.message); // Imposta il messaggio di errore
       } else {
-        // Se il login ha successo, reindirizza alla HomePage
-        navigate("/homepage");
+        login(data.token, data.user.username, data.user.email);
       }
     } catch (err) {
       setError("Errore durante la connessione al server.");
@@ -65,7 +63,8 @@ export default function Login() {
             Accedi
           </h1>
           <form onSubmit={handleSubmit}>
-            {error && <div className="text-red-500 mb-4">{error}</div>} {/* Messaggio di errore */}
+            {error && <div className="text-red-500 mb-4">{error}</div>}{" "}
+            {/* Messaggio di errore */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -79,6 +78,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required // Aggiunto per rendere il campo obbligatorio
               />
             </div>
             <div className="mb-6">
@@ -94,6 +94,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required // Aggiunto per rendere il campo obbligatorio
               />
             </div>
             <div className="flex items-center justify-between">
@@ -123,8 +124,3 @@ export default function Login() {
     </div>
   );
 }
-
-
-
-
-

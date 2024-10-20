@@ -6,7 +6,7 @@ import "../styles/TU-style.css";
 export default function HomePage() {
   const [postContent, setPostContent] = useState("");
   const [posts, setPosts] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -14,7 +14,9 @@ export default function HomePage() {
         const data = await getUserPosts();
         setPosts(data);
       } catch (error) {
-        setErrorMessage("Errore durante il recupero dei post: " + error.message);
+        setErrorMessage(
+          "Errore durante il recupero dei post: " + error.message
+        );
         console.error("Errore durante il recupero dei post:", error);
       }
     };
@@ -26,15 +28,21 @@ export default function HomePage() {
     e.preventDefault();
     if (postContent.trim() !== "") {
       try {
-        const newPost = { titolo: "Titolo del post", testo: postContent, immagine: "" };
+        const newPost = {
+          titolo: "Titolo del post",
+          testo: postContent,
+          immagine: "",
+        };
         await createPost(newPost);
 
         const updatedPosts = await getUserPosts();
         setPosts(updatedPosts);
         setPostContent("");
-        setErrorMessage('');
+        setErrorMessage("");
       } catch (error) {
-        setErrorMessage("Errore durante la creazione del post: " + error.message);
+        setErrorMessage(
+          "Errore durante la creazione del post: " + error.message
+        );
         console.error("Errore durante la creazione del post:", error);
       }
     }
@@ -45,15 +53,17 @@ export default function HomePage() {
       await deletePost(postId);
       const updatedPosts = await getUserPosts();
       setPosts(updatedPosts);
-      setErrorMessage('');
+      setErrorMessage("");
     } catch (error) {
-      setErrorMessage("Errore durante l'eliminazione del post: " + error.message);
+      setErrorMessage(
+        "Errore durante l'eliminazione del post: " + error.message
+      );
       console.error("Errore durante l'eliminazione del post:", error);
     }
   };
 
   // Numero di ripetizioni
-  const repeatCount = 5;
+  const repeatCount = 999;
 
   return (
     <div className="bg-gray-900 text-white p-4 relative overflow-hidden">
@@ -89,18 +99,25 @@ export default function HomePage() {
             onChange={(e) => setPostContent(e.target.value)}
           />
           <div className="icons flex justify-between">
-            <button type="button" className="mr-5 text-gray-300 hover:text-white text-lg">
-              <img src="/assets/icons/add-photo.png" alt="icona aggiungi immagine" />
+            <button
+              type="button"
+              className="mr-5 text-gray-300 hover:text-white text-lg"
+            >
+              <img
+                src="/assets/icons/add-photo.png"
+                alt="icona aggiungi immagine"
+              />
             </button>
-            <button type="submit" className="mr-5 text-gray-300 hover:text-white text-lg">
+            <button
+              type="submit"
+              className="mr-5 text-gray-300 hover:text-white text-lg"
+            >
               <img src="/assets/icons/send.png" alt="icona di invio" />
             </button>
           </div>
         </form>
         {errorMessage && (
-          <div className="text-red-500 text-sm mt-2">
-            {errorMessage}
-          </div>
+          <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
         )}
       </div>
 
@@ -116,12 +133,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-

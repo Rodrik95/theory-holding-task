@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../styles/TU-style.css";
 
 export default function Navbar() {
@@ -16,16 +17,20 @@ export default function Navbar() {
 
         {/* Link di navigazione */}
         <div className="icons flex space-x-4">
-          <a href="/homepage" className="mr-5 text-gray-300 hover:text-white text-lg">
+          <Link
+            to="/homepage"
+            className="mr-5 text-gray-300 hover:text-white text-lg"
+          >
             <img src="/assets/icons/home.png" alt="icona home" />
-          </a>
-          <a href="/profile" className="mr-5 text-gray-300 hover:text-white text-lg">
+          </Link>
+          <Link
+            to="/profile"
+            className="mr-5 text-gray-300 hover:text-white text-lg"
+          >
             <img src="/assets/icons/user.png" alt="icona profilo" />
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
   );
 }
-
-  

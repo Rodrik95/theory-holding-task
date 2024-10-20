@@ -1,0 +1,13 @@
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px rgb(55 65 81 / var(--tw-bg-opacity)) inset; /* Colore grigio */
+    box-shadow: 0 0 0 30px rgb(55 65 81 / var(--tw-bg-opacity)) inset; /* Colore grigio */
+    -webkit-text-fill-color: #fff; /* Colore del testo */
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+}
+
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px rgb(55 65 81 / var(--tw-bg-opacity)) inset; /* Colore grigio quando focus */
+    box-shadow: 0 0 0 30px rgb(55 65 81 / var(--tw-bg-opacity)) inset; /* Colore grigio quando focus */
+    -webkit-text-fill-color: #fff; /* Colore del testo */
+    background-color: rgb(55 65 81 / var(--tw-bg-opacity));
+}
