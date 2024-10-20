@@ -10,3 +10,26 @@
 .icons img:hover {
     opacity: 100%;
 }
+
+.error-message {
+    color: #dc7f06; /* Un rosso meno intenso e più delicato */
+    font-size: 0.9rem; /* Dimensione del font più piccola */
+    background-color: rgba(255, 110, 97, 0.1); /* Sfondo leggero per il messaggio di errore */
+    border-left: 4px solid #ff6f61; /* Bordo laterale per accentuare il messaggio */
+    padding: 0.5rem; /* Padding interno per dare spazio */
+    border-radius: 5px; /* Angoli arrotondati */
+    margin-bottom: 1rem; /* Margine inferiore per distanziare dagli altri elementi */
+    transition: all 0.3s ease; /* Transizione dolce per l'hover */
+  }
+  
+  .error-message:hover {
+    opacity: 0.8; /* Leggero effetto di opacità al passaggio del mouse */
+  }
+  
+
+  .custom-image {
+    width: 20rem; /* Dimensione dell'immagine */
+    height: auto; /* Mantieni le proporzioni dell'immagine */
+    margin-bottom: 20rem; /* Spaziatura inferiore tra le immagini */
+  }
+  

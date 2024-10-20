@@ -6,13 +6,10 @@ module.exports = (db) => {
   
   // 1. Crea un post
   router.post('/', (req, res) => {
-    const { titolo, testo, immagine, utente_id } = req.body;
-    if (req.userId !== utente_id) {
-      return res.status(403).send('Accesso negato. Non puoi creare post per altri utenti.');
-    }
+    const { titolo, testo, immagine } = req.body;
     const sql = `INSERT INTO post (titolo, testo, immagine, data_pubblicazione, utente_id) 
                  VALUES (?, ?, ?, NOW(), ?)`;
-    db.query(sql, [titolo, testo, immagine, utente_id], (err, result) => {
+    db.query(sql, [titolo, testo, immagine, req.userId], (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).send('Errore durante la creazione del post.');
@@ -23,7 +20,7 @@ module.exports = (db) => {
 
   // 2. Ottieni tutti i post dell'utente loggato
   router.get('/', (req, res) => {
-    const sql = 'SELECT p.*, u.nickname FROM post p JOIN utente u ON p.utente_id = u.id WHERE utente_id = ?';
+    const sql = 'SELECT p.*, u.username FROM post p JOIN utente u ON p.utente_id = u.id WHERE utente_id = ? ORDER BY data_pubbLicazione DESC';
     db.query(sql, [req.userId], (err, results) => {
       if (err) {
         console.error(err);

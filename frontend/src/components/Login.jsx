@@ -1,14 +1,40 @@
 import "../styles/TU-style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // Stato per messaggi di errore
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // ... logica di invio dei dati
+
+    // Logica di invio dei dati
+    try {
+      const response = await fetch("http://localhost:3002/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      sessionStorage.setItem("token", data.token);
+
+      if (!response.ok) {
+        setError(data.message); // Imposta il messaggio di errore
+      } else {
+        // Se il login ha successo, reindirizza alla HomePage
+        navigate("/homepage");
+      }
+    } catch (err) {
+      setError("Errore durante la connessione al server.");
+      console.log(err);
+    }
   };
 
   return (
@@ -39,6 +65,7 @@ function Login() {
             Accedi
           </h1>
           <form onSubmit={handleSubmit}>
+            {error && <div className="text-red-500 mb-4">{error}</div>} {/* Messaggio di errore */}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -97,4 +124,7 @@ function Login() {
   );
 }
 
-export default Login;
+
+
+
+
