@@ -1,11 +1,15 @@
 const express = require("express");
 const mysql = require("mysql2");
+/* const bodyParser = require ("body-parser"); */
 const cors = require("cors");
 const app = express();
-const port = 3000;
+const port = 3002;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Sostituisci con l'origine esatta del tuo frontend
+  credentials: true
+}));
 app.use(express.json());
 
 // Configurazione della connessione a MySQL
@@ -25,10 +29,15 @@ db.connect((err) => {
   console.log("Connesso al database MySQL.");
 });
 
-// Rotta di esempio
-app.get("/", (req, res) => {
-  res.send("Backend del progetto di theoryutenti");
+app.use((req, res, next) => {
+  // Simula l'ID utente loggato. Puoi sostituire questo con l'autenticazione JWT o sessioni.
+  req.userId = 1;  // Assumi che l'utente loggato abbia ID 1
+  next();
 });
+
+// Importa e usa le rotte dei post
+const postRoutes = require('./routes/postRoutes')(db);
+app.use('/posts', postRoutes);
   
 // Avviare il server
 app.listen(port, () => {
