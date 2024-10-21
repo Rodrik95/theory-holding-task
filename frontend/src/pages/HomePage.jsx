@@ -7,6 +7,7 @@ export default function HomePage() {
   const [postContent, setPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null); // Stato per l'immagine selezionata
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -24,20 +25,32 @@ export default function HomePage() {
     fetchPosts();
   }, []);
 
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]); // Aggiorna l'immagine selezionata
+  };
+
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     if (postContent.trim() !== "") {
       try {
         const newPost = {
-          titolo: "Titolo del post",
           testo: postContent,
-          immagine: "",
         };
-        await createPost(newPost);
+
+        if (selectedImage) {
+          const formData = new FormData();
+          formData.append("testo", postContent);
+          formData.append("immagine", selectedImage); // Aggiunge l'immagine al FormData
+
+          await createPost(formData); // Invio del post con immagine
+        } else {
+          await createPost(newPost); // Invio del post senza immagine
+        }
 
         const updatedPosts = await getUserPosts();
         setPosts(updatedPosts);
         setPostContent("");
+        setSelectedImage(null); // Resetta l'immagine selezionata
         setErrorMessage("");
       } catch (error) {
         setErrorMessage(
@@ -62,7 +75,6 @@ export default function HomePage() {
     }
   };
 
-  // Numero di ripetizioni
   const repeatCount = 999;
 
   return (
@@ -98,16 +110,20 @@ export default function HomePage() {
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
           />
+
           <div className="icons flex justify-between">
-            <button
-              type="button"
-              className="mr-5 text-gray-300 hover:text-white text-lg"
-            >
+            <label className="mr-5 text-gray-300 hover:text-white text-lg cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange} // Selezione immagine
+                style={{ display: "none" }} // Nasconde l'input file
+              />
               <img
                 src="/assets/icons/add-photo.png"
                 alt="icona aggiungi immagine"
               />
-            </button>
+            </label>
             <button
               type="submit"
               className="mr-5 text-gray-300 hover:text-white text-lg"
@@ -133,3 +149,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+

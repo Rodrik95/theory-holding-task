@@ -5,26 +5,36 @@ const router = express.Router();
 module.exports = (db) => {
   
   // 1. Crea un post
-  router.post('/', (req, res) => {
-    const { titolo, testo, immagine } = req.body;
-    const sql = `INSERT INTO post (titolo, testo, immagine, data_pubblicazione, utente_id) 
-                 VALUES (?, ?, ?, NOW(), ?)`;
-    db.query(sql, [titolo, testo, immagine, req.userId], (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Errore durante la creazione del post.');
-      }
-      res.status(201).send('{}');
-    });
+router.post('/', (req, res) => {
+  const { testo, immagine } = req.body;
+
+  // Aggiungi questo logging
+  console.log('Dati ricevuti per la creazione del post:', { testo, immagine });
+
+  // Controllo se l'utente è autenticato
+  if (!req.userId) {
+    return res.status(403).send({ message: 'Utente non autorizzato.' });
+  }
+
+  const sql = `INSERT INTO post (testo, immagine, data_pubblicazione, utente_id) 
+               VALUES (?, ?, NOW(), ?)`;
+  db.query(sql, [testo, immagine, req.userId], (err, result) => {
+    if (err) {
+      console.error('Errore nella query SQL:', err);  // Logga l'errore
+      return res.status(500).send({ message: 'Errore durante la creazione del post.' });
+    }
+    res.status(201).send({ message: 'Post creato con successo.' });
   });
+});
+
 
   // 2. Ottieni tutti i post dell'utente loggato
   router.get('/', (req, res) => {
-    const sql = 'SELECT p.*, u.username FROM post p JOIN utente u ON p.utente_id = u.id WHERE utente_id = ? ORDER BY data_pubbLicazione DESC';
+    const sql = 'SELECT p.*, u.username FROM post p JOIN utente u ON p.utente_id = u.id WHERE utente_id = ? ORDER BY data_pubblicazione DESC';
     db.query(sql, [req.userId], (err, results) => {
       if (err) {
         console.error(err);
-        return res.status(500).send('Errore durante il recupero dei post.');
+        return res.status(500).send({ message: 'Errore durante il recupero dei post.' });
       }
       res.json(results);
     });
@@ -36,10 +46,10 @@ module.exports = (db) => {
     db.query(sql, [req.params.id, req.userId], (err, result) => {
       if (err) {
         console.error(err);
-        return res.status(500).send('Errore durante il recupero del post.');
+        return res.status(500).send({ message: 'Errore durante il recupero del post.' });
       }
       if (result.length === 0) {
-        return res.status(404).send('Post non trovato o non autorizzato.');
+        return res.status(404).send({ message: 'Post non trovato o non autorizzato.' });
       }
       res.json(result[0]);
     });
@@ -47,17 +57,17 @@ module.exports = (db) => {
 
   // 4. Aggiorna un post se appartiene all'utente loggato
   router.put('/:id', (req, res) => {
-    const { titolo, testo, immagine } = req.body;
-    const sql = `UPDATE post SET titolo = ?, testo = ?, immagine = ? WHERE id = ? AND utente_id = ?`;
-    db.query(sql, [titolo, testo, immagine, req.params.id, req.userId], (err, result) => {
+    const { testo, immagine } = req.body;
+    const sql = `UPDATE post SET testo = ?, immagine = ? WHERE id = ? AND utente_id = ?`;
+    db.query(sql, [testo, immagine, req.params.id, req.userId], (err, result) => {
       if (err) {
         console.error(err);
-        return res.status(500).send('Errore durante l\'aggiornamento del post.');
+        return res.status(500).send({ message: 'Errore durante l\'aggiornamento del post.' });
       }
       if (result.affectedRows === 0) {
-        return res.status(404).send('Post non trovato o non autorizzato.');
+        return res.status(404).send({ message: 'Post non trovato o non autorizzato.' });
       }
-      res.send('{}');
+      res.send({ message: 'Post aggiornato con successo.' });
     });
   });
 
@@ -67,14 +77,15 @@ module.exports = (db) => {
     db.query(sql, [req.params.id, req.userId], (err, result) => {
       if (err) {
         console.error(err);
-        return res.status(500).send('Errore durante l\'eliminazione del post.');
+        return res.status(500).send({ message: 'Errore durante l\'eliminazione del post.' });
       }
       if (result.affectedRows === 0) {
-        return res.status(404).send('Post non trovato o non autorizzato.');
+        return res.status(404).send({ message: 'Post non trovato o non autorizzato.' });
       }
-      res.send('{}');
+      res.send({ message: 'Post eliminato con successo.' });
     });
   });
 
   return router;
 };
+

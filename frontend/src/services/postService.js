@@ -1,6 +1,4 @@
-// postService.js
-
-const API_URL = "http://localhost:3002/posts"; // il tuo URL backend
+const API_URL = "http://localhost:3002/posts"; // Il tuo URL backend
 
 // Crea un nuovo post
 export const createPost = async (postData) => {
@@ -8,10 +6,10 @@ export const createPost = async (postData) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
     },
     body: JSON.stringify(postData),
-    credentials: "include", // include i cookie se usi la sessione
+    credentials: "include", // Include i cookie se usi la sessione
   });
 
   if (!response.ok) {
@@ -28,7 +26,7 @@ export const getUserPosts = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
     },
   });
 
@@ -46,7 +44,7 @@ export const getPostById = async (postId) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
     },
   });
 
@@ -64,7 +62,7 @@ export const deletePost = async (postId) => {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
     },
   });
 
@@ -75,5 +73,8 @@ export const deletePost = async (postId) => {
 
   return response.json();
 };
+
+
+
 
 
