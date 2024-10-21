@@ -52,7 +52,7 @@ export const updateUser = async (userData) => {
 // Funzione per eliminare l'account utente
 export const deleteUser = async () => {
   try {
-    const response = await fetch(`${API_URL}/user/delete`, {
+    const response = await fetch(`${API_URL}/user/`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${sessionStorage.getItem("token")}`

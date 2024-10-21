@@ -1,5 +1,5 @@
 import "../styles/TU-style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { registerUser } from "../services/userService"; // Importa la funzione di registrazione
 
@@ -17,6 +17,7 @@ export default function Register() {
   const [successMessage, setSuccessMessage] = useState(""); // Stato per messaggi di successo
 
   const errorRef = useRef(null); // Ref per scorrere all'errore
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (errorMessage && errorRef.current) {
@@ -60,6 +61,7 @@ export default function Register() {
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      navigate("/homepage");
     } catch (error) {
       // Mostra messaggi di errore specifici in base alla risposta dal server
       if (error.response && error.response.status === 409) {

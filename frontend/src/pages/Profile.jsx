@@ -1,8 +1,7 @@
-import { useState, useRef, useContext} from "react";
-import { updateUser } from "../services/userService";
+import { useState, useRef, useContext } from "react";
+import { updateUser, deleteUser } from "../services/userService";
 import { useNavigate } from "react-router-dom";
 import "../styles/TU-style.css";
-import "./Profile.css";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Profile() {
@@ -33,6 +32,15 @@ export default function Profile() {
     const { name, value } = e.target;
     setNewData((prevData) => ({ ...prevData, [name]: value }));
     setErrorMessage("");
+  };
+
+  // Funzione per gestire l'upload dell'immagine
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileData((prevData) => ({ ...prevData, imageUrl }));
+    }
   };
 
   // Edit profile function
@@ -78,7 +86,8 @@ export default function Profile() {
   // Popup confirmation for delete
   const handleConfirmDelete = async () => {
     try {
-      // Here you can call your delete user service (not yet implemented)
+      await deleteUser();
+      logout();
       console.log("Account eliminato");
       setShowPopup(false);
     } catch {
@@ -115,12 +124,24 @@ export default function Profile() {
     <div className="max-w-xl mx-auto p-4 bg-gray-800 text-white rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Impostazioni profilo</h2>
 
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <img
           src={profileData.imageUrl}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover mx-auto mb-4"
         />
+        <label htmlFor="image-upload" className="absolute inset-0 cursor-pointer flex justify-center items-center ml-16 mt-20">
+        <input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+          />
+          <button className="icons">
+            <img src="/assets/icons/add-photo.png" alt="icona aggiungi" />
+          </button>
+        </label>
       </div>
 
       {errorMessage && (
@@ -233,39 +254,34 @@ export default function Profile() {
             <h3 className="text-lg font-bold">
               {popupType === "delete" && "Sei sicuro di voler eliminare il tuo account?"}
               {popupType === "logout" && "Sei sicuro di voler effettuare il logout?"}
-              {popupType === "save" && "Le modifiche sono state salvate!"}
+              {popupType === "save" && "Modifiche salvate!"}
             </h3>
             <div className="mt-4">
               {popupType === "delete" && (
-                <button
-                  onClick={handleConfirmDelete}
-                  className="bg-red-600 text-white p-2 rounded-lg mr-2"
-                >
-                  Elimina
-                </button>
+                <>
+                  <button onClick={handleConfirmDelete} className="bg-red-600 text-white px-4 py-2 rounded mr-2">
+                    Elimina
+                  </button>
+                  <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                    Annulla
+                  </button>
+                </>
               )}
               {popupType === "logout" && (
-                <button
-                  onClick={handleConfirmLogout}
-                  className="bg-blue-600 text-white p-2 rounded-lg mr-2"
-                >
-                  Logout
-                </button>
+                <>
+                  <button onClick={handleConfirmLogout} className="bg-red-600 text-white px-4 py-2 rounded mr-2">
+                    Logout
+                  </button>
+                  <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                    Annulla
+                  </button>
+                </>
               )}
               {popupType === "save" && (
-                <button
-                  onClick={() => setShowPopup(false)}
-                  className="bg-blue-600 text-white p-2 rounded-lg mr-2"
-                >
-                  OK
+                <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                  Chiudi
                 </button>
               )}
-              <button
-                onClick={() => setShowPopup(false)}
-                className="bg-gray-600 text-white p-2 rounded-lg"
-              >
-                Annulla
-              </button>
             </div>
           </div>
         </div>
@@ -273,6 +289,7 @@ export default function Profile() {
     </div>
   );
 }
+
 
 
 

@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Post from "../components/Post";
 import { getUserPosts, createPost, deletePost } from "../services/postService";
 import "../styles/TU-style.css";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function HomePage() {
   const [postContent, setPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null); // Stato per l'immagine selezionata
+  const  { logout } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -15,10 +17,14 @@ export default function HomePage() {
         const data = await getUserPosts();
         setPosts(data);
       } catch (error) {
-        setErrorMessage(
-          "Errore durante il recupero dei post: " + error.message
-        );
-        console.error("Errore durante il recupero dei post:", error);
+        if (error.message && error.message.indexOf("Token non") > -1) {
+          logout();
+        } else {
+          setErrorMessage(
+            "Errore durante il recupero dei post: " + error.message
+          );
+          console.error("Errore durante il recupero dei post:", error);
+        }
       }
     };
 
@@ -38,15 +44,12 @@ export default function HomePage() {
         };
 
         if (selectedImage) {
-          const formData = new FormData();
-          formData.append("testo", postContent);
-          formData.append("immagine", selectedImage); // Aggiunge l'immagine al FormData
-
-          await createPost(formData); // Invio del post con immagine
+          //TODO gestire l'immagine
+          await createPost(newPost); // Invio del post con immagine
         } else {
           await createPost(newPost); // Invio del post senza immagine
         }
-
+        
         const updatedPosts = await getUserPosts();
         setPosts(updatedPosts);
         setPostContent("");
@@ -73,6 +76,12 @@ export default function HomePage() {
       );
       console.error("Errore durante l'eliminazione del post:", error);
     }
+  };
+
+
+  const handleResizeTextarea = (e) => {
+    e.target.style.height = 'auto';  // Reset per calcolare la nuova altezza
+    e.target.style.height = `${e.target.scrollHeight}px`;  // Imposta l'altezza in base al contenuto
   };
 
   const repeatCount = 999;
@@ -106,9 +115,12 @@ export default function HomePage() {
         <form onSubmit={handlePostSubmit}>
           <textarea
             placeholder="Vuoi pubblicare qualcosa?"
-            className="w-full p-2 rounded-lg mb-2 text-black"
+            className="bg-gray-800 w-full p-2 rounded-lg mb-2 text-white"
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
+            onInput={handleResizeTextarea}  // Aggiungi l'evento onInput qui
+            rows={3}  // Altezza minima della textarea
+            style={{ overflow: 'hidden', border: 'none', outline: 'none' }}  // Nasconde la barra di scorrimento
           />
 
           <div className="icons flex justify-between">
@@ -149,5 +161,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-

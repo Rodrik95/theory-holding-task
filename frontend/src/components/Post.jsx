@@ -67,7 +67,7 @@ export default function Post(props) {
       </div>
 
       <p className="mb-2">
-        {props.post.testo.split("\n").map((line, index) => (
+        {props.post.testo?.split("\n").map((line, index) => (
           <span key={index}>
             {line}
             <br /> {/* Aggiungi un <br /> per ogni a capo */}
