@@ -5,7 +5,7 @@ import "../styles/TU-style.css";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function Profile() {
-  const navigate = useNavigate(); // Inizializza useNavigate
+  const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
   const [profileData, setProfileData] = useState({
@@ -27,14 +27,13 @@ export default function Profile() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupType, setPopupType] = useState(""); // "delete" | "logout" | "save"
 
-  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewData((prevData) => ({ ...prevData, [name]: value }));
     setErrorMessage("");
   };
 
-  // Funzione per gestire l'upload dell'immagine
+  // TODO: upload immagine
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -43,7 +42,6 @@ export default function Profile() {
     }
   };
 
-  // Edit profile function
   const handleEditProfile = async () => {
     if (!newData.username || !newData.email || !newData.password) {
       setErrorMessage("Nickname, email e password sono richiesti.");
@@ -66,7 +64,7 @@ export default function Profile() {
       }));
       setPopupType("save");
       setShowPopup(true);
-      setIsEditing(false); // Exit edit mode after saving
+      setIsEditing(false);
     } catch (error) {
       setErrorMessage(error.message);
       errorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -83,7 +81,7 @@ export default function Profile() {
     setShowPopup(true);
   };
 
-  // Popup confirmation for delete
+  // POPUP DELETE ACCOUNT
   const handleConfirmDelete = async () => {
     try {
       await deleteUser();
@@ -96,7 +94,7 @@ export default function Profile() {
     }
   };
 
-  // Popup confirmation for logout
+  // POPUP LOGOUT
   const handleConfirmLogout = async () => {
     try {
       // Implement logout functionality (e.g., clear session storage)
@@ -130,8 +128,11 @@ export default function Profile() {
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover mx-auto mb-4"
         />
-        <label htmlFor="image-upload" className="absolute inset-0 cursor-pointer flex justify-center items-center ml-16 mt-20">
-        <input
+        <label
+          htmlFor="image-upload"
+          className="absolute inset-0 cursor-pointer flex justify-center items-center ml-16 mt-20"
+        >
+          <input
             id="image-upload"
             type="file"
             accept="image/*"
@@ -145,7 +146,10 @@ export default function Profile() {
       </div>
 
       {errorMessage && (
-        <p ref={errorRef} className="error-message text-red-500 text-center mb-4">
+        <p
+          ref={errorRef}
+          className="error-message text-red-500 text-center mb-4"
+        >
           {errorMessage}
         </p>
       )}
@@ -252,33 +256,50 @@ export default function Profile() {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-gray-800 rounded-lg p-6 w-80 text-center">
             <h3 className="text-lg font-bold">
-              {popupType === "delete" && "Sei sicuro di voler eliminare il tuo account?"}
-              {popupType === "logout" && "Sei sicuro di voler effettuare il logout?"}
+              {popupType === "delete" &&
+                "Sei sicuro di voler eliminare il tuo account?"}
+              {popupType === "logout" &&
+                "Sei sicuro di voler effettuare il logout?"}
               {popupType === "save" && "Modifiche salvate!"}
             </h3>
             <div className="mt-4">
               {popupType === "delete" && (
                 <>
-                  <button onClick={handleConfirmDelete} className="bg-red-600 text-white px-4 py-2 rounded mr-2">
+                  <button
+                    onClick={handleConfirmDelete}
+                    className="bg-red-600 text-white px-4 py-2 rounded mr-2"
+                  >
                     Elimina
                   </button>
-                  <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                  <button
+                    onClick={() => setShowPopup(false)}
+                    className="bg-gray-600 text-white px-4 py-2 rounded"
+                  >
                     Annulla
                   </button>
                 </>
               )}
               {popupType === "logout" && (
                 <>
-                  <button onClick={handleConfirmLogout} className="bg-red-600 text-white px-4 py-2 rounded mr-2">
+                  <button
+                    onClick={handleConfirmLogout}
+                    className="bg-red-600 text-white px-4 py-2 rounded mr-2"
+                  >
                     Logout
                   </button>
-                  <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                  <button
+                    onClick={() => setShowPopup(false)}
+                    className="bg-gray-600 text-white px-4 py-2 rounded"
+                  >
                     Annulla
                   </button>
                 </>
               )}
               {popupType === "save" && (
-                <button onClick={() => setShowPopup(false)} className="bg-gray-600 text-white px-4 py-2 rounded">
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="bg-gray-600 text-white px-4 py-2 rounded"
+                >
                   Chiudi
                 </button>
               )}
@@ -289,16 +310,3 @@ export default function Profile() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,13 +6,12 @@ import { AuthContext } from "../contexts/AuthContext";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // Stato per messaggi di errore
+  const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Logica di invio dei dati
     try {
       const response = await fetch("http://localhost:3002/login", {
         method: "POST",
@@ -25,7 +24,7 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message); // Imposta il messaggio di errore
+        setError(data.message);
       } else {
         login(data.token, data.user.username, data.user.email);
       }
@@ -37,7 +36,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen bg-gray-900">
-      {/* Sezione sinistra */}
+      {/* SINISTRA / SOPRA */}
       <div className="flex flex-col justify-start lg:w-1/2 w-full p-5 lg:p-10 text-white">
         <div className="flex items-center justify-start mb-6">
           <img
@@ -56,15 +55,14 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Sezione destra: il form di login */}
+      {/* DESTRA / SOTTO */}
       <div className="flex items-center justify-center lg:w-1/2 w-full h-screen bg-gray-900">
         <div className="colorfull bg-white p-10 rounded-lg shadow-md w-full max-w-md">
           <h1 className="text-gray-900 text-4xl font-bold mb-6 text-center">
             Accedi
           </h1>
           <form onSubmit={handleSubmit}>
-            {error && <div className="text-red-500 mb-4">{error}</div>}{" "}
-            {/* Messaggio di errore */}
+            {error && <div className="text-red-500 mb-4">{error}</div>}
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -78,7 +76,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required // Aggiunto per rendere il campo obbligatorio
+                required
               />
             </div>
             <div className="mb-6">
@@ -94,7 +92,7 @@ export default function Login() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required // Aggiunto per rendere il campo obbligatorio
+                required
               />
             </div>
             <div className="flex items-center justify-between">
@@ -106,8 +104,6 @@ export default function Login() {
               </button>
             </div>
           </form>
-
-          {/* Logica di non registrati */}
           <div className="mt-6 text-center">
             <p className="text-gray-700">
               Ancora non sei registrato?{" "}

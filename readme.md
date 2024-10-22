@@ -14,6 +14,8 @@ Gli utenti devono essere in grado di
 ---------------------------------------------------------------------------
 
 # Istruzioni 
-
-- Per prima cosa creare il database secondo il file database.sql
-
+ * fare `npm i` nella directory di front-end
+ * fare `npm i` nella directory di back-end
+ * preparare un database con una tabella come indicato in `backend/database.sql` e impostare nome database e credenziali in `backend/src/index.js`
+ * avviare il back-end nella sua directory con `npm run dev`
+ * avviare il front-end nella sua directory con `npm run dev`

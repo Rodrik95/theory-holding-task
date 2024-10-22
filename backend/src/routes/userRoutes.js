@@ -4,12 +4,12 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 
 module.exports = (db) => {
-  // Aggiornamento utente
+  // UPDATE UTENTE
   router.put("/", async (req, res) => {
     const userId = req.userId;
     const { email, password, username } = req.body;
 
-    // Verifica se l'ID utente è fornito
+    // Verifica per id
     if (!userId) {
       return res.status(400).json({ message: "ID utente mancante." });
     }
@@ -43,11 +43,11 @@ module.exports = (db) => {
     }
   });
 
-  // Eliminazione utente
+  // DELETE UTENTE
   router.delete("/", (req, res) => {
     const userId = req.userId;
 
-    // Verifica se l'ID utente è fornito
+    // Verifica per id
     if (!userId) {
       return res.status(400).json({ message: "ID utente mancante." });
     }

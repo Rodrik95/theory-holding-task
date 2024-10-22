@@ -14,9 +14,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Navigate to="/homepage" /> : <Login />} />
-        <Route path="/login" element={isAuthenticated ? <Navigate to="/homepage" /> : <Login />} />
-        <Route path="/register" element={isAuthenticated ? <Navigate to="/homepage" /> : <Register />} />
+        <Route
+          path="/"
+          element={isAuthenticated ? <Navigate to="/homepage" /> : <Login />}
+        />
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/homepage" /> : <Login />}
+        />
+        <Route
+          path="/register"
+          element={isAuthenticated ? <Navigate to="/homepage" /> : <Register />}
+        />
         <Route element={<Layout />}>
           <Route
             path="/homepage"

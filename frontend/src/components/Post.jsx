@@ -1,37 +1,35 @@
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime"; // Importa il plugin per le date relative
-import "dayjs/locale/it"; // Importa la lingua italiana
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/it";
 import "../styles/TU-style.css";
 
 dayjs.extend(relativeTime);
 
 export default function Post(props) {
-  const [showPopup, setShowPopup] = useState(false); // Stato per gestire il popup
-  const [timestamp, setTimestamp] = useState(""); // Stato per il timestamp relativo
-  const [errorMessage, setErrorMessage] = useState(""); // Stato per i messaggi di errore
+  const [showPopup, setShowPopup] = useState(false);
+  const [timestamp, setTimestamp] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Imposta il locale in italiano
     dayjs.locale("it");
 
-    // Imposta il timestamp relativo
-    const postTime = props.post.createdAt ? props.post.createdAt : new Date();
-    setTimestamp(dayjs(postTime).fromNow()); // Formattazione "relativa"
-  }, [props.post.createdAt]);
+    // Timestamp relativo
+    setTimestamp(dayjs(props.post.data_pubblicazione).fromNow());
+  }, [props.post]);
 
   const handleDeleteConfirmation = () => {
-    setShowPopup(true); // Mostra il popup
+    setShowPopup(true);
   };
 
   const handleCancelDelete = () => {
-    setShowPopup(false); // Nasconde il popup
+    setShowPopup(false);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      await props.handleDeletePost(props.post.id); // Chiama la funzione di eliminazione
-      setShowPopup(false); // Nasconde il popup dopo l'eliminazione
+      await props.handleDeletePost(props.post.id);
+      setShowPopup(false);
     } catch (error) {
       setErrorMessage(
         error.message || "Errore durante l'eliminazione del post"
@@ -41,7 +39,6 @@ export default function Post(props) {
 
   return (
     <div className="bg-gray-800 p-4 rounded-lg mb-4 mx-auto max-w-2xl">
-      {/* Aggiungi il timestamp di pubblicazione relativo sopra l'immagine del profilo */}
       <div className="text-gray-400 text-sm mb-2">Pubblicato {timestamp}</div>
 
       <div className="flex items-center justify-between mb-2">
@@ -83,24 +80,12 @@ export default function Post(props) {
         />
       )}
 
-      {/* <div className="flex space-x-2">
-        <button className="bg-blue-600 text-white rounded-lg p-1">
-          Mi piace
-        </button>
-        <button className="bg-blue-600 text-white rounded-lg p-1">
-          Commenta
-        </button>
-        <button className="bg-blue-600 text-white rounded-lg p-1">
-          Condividi
-        </button>
-      </div> */}
-
-      {/* Mostra messaggio di errore se presente */}
+      
       {errorMessage && (
         <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
       )}
 
-      {/* Popup di conferma */}
+      {/* POPUP */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black z-50 bg-black bg-opacity-50">
           <div className="bg-gray-800 rounded-lg p-6 w-80 text-center">

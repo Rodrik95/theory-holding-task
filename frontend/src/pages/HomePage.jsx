@@ -9,7 +9,7 @@ export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedImage, setSelectedImage] = useState(null); // Stato per l'immagine selezionata
-  const  { logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,10 +29,10 @@ export default function HomePage() {
     };
 
     fetchPosts();
-  }, []);
+  }, [logout]);
 
   const handleImageChange = (e) => {
-    setSelectedImage(e.target.files[0]); // Aggiorna l'immagine selezionata
+    setSelectedImage(e.target.files[0]);
   };
 
   const handlePostSubmit = async (e) => {
@@ -49,7 +49,7 @@ export default function HomePage() {
         } else {
           await createPost(newPost); // Invio del post senza immagine
         }
-        
+
         const updatedPosts = await getUserPosts();
         setPosts(updatedPosts);
         setPostContent("");
@@ -78,17 +78,16 @@ export default function HomePage() {
     }
   };
 
-
   const handleResizeTextarea = (e) => {
-    e.target.style.height = 'auto';  // Reset per calcolare la nuova altezza
-    e.target.style.height = `${e.target.scrollHeight}px`;  // Imposta l'altezza in base al contenuto
+    e.target.style.height = "auto"; // Reset per calcolare la nuova altezza
+    e.target.style.height = `${e.target.scrollHeight}px`; // Imposta l'altezza in base al contenuto
   };
 
   const repeatCount = 999;
 
   return (
     <div className="bg-gray-900 text-white p-4 relative overflow-hidden">
-      {/* Immagini laterali */}
+      {/* SINISTRA & DESTRA */}
       <div className="hidden lg:flex flex-col items-start absolute left-0 top-14">
         {[...Array(repeatCount)].map((_, index) => (
           <img
@@ -110,7 +109,7 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* Area di creazione del post */}
+      {/* CENTRO post da creare */}
       <div className="bg-gray-800 p-4 rounded-lg mb-6 mx-auto max-w-2xl">
         <form onSubmit={handlePostSubmit}>
           <textarea
@@ -118,9 +117,9 @@ export default function HomePage() {
             className="bg-gray-800 w-full p-2 rounded-lg mb-2 text-white"
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
-            onInput={handleResizeTextarea}  // Aggiungi l'evento onInput qui
-            rows={3}  // Altezza minima della textarea
-            style={{ overflow: 'hidden', border: 'none', outline: 'none' }}  // Nasconde la barra di scorrimento
+            onInput={handleResizeTextarea}
+            rows={3}
+            style={{ overflow: "hidden", border: "none", outline: "none" }}
           />
 
           <div className="icons flex justify-between">
@@ -149,6 +148,7 @@ export default function HomePage() {
         )}
       </div>
 
+      {/* CENTRO post creati */}
       {posts.length === 0 ? (
         <div className="bg-gray-800 p-4 rounded-lg mb-4 mx-auto max-w-2xl">
           <p>Nessun post disponibile. Pubblica qualcosa!</p>

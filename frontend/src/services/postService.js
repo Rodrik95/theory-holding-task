@@ -1,12 +1,12 @@
-const API_URL = "http://localhost:3002/posts"; // Il tuo URL backend
+const API_URL = "http://localhost:3002/posts";
 
-// Crea un nuovo post
+// CREATE POST
 export const createPost = async (postData) => {
   const response = await fetch(`${API_URL}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Aggiunto token JWT per autenticazione
     },
     body: JSON.stringify(postData),
     credentials: "include", // Include i cookie se usi la sessione
@@ -14,19 +14,21 @@ export const createPost = async (postData) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "Errore durante la creazione del post");
+    throw new Error(
+      errorData.message || "Errore durante la creazione del post"
+    );
   }
 
   return response.json();
 };
 
-// Ottieni tutti i post dell'utente
+// GET POST
 export const getUserPosts = async () => {
   const response = await fetch(`${API_URL}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Aggiunto token JWT per autenticazione
     },
   });
 
@@ -38,43 +40,22 @@ export const getUserPosts = async () => {
   return response.json();
 };
 
-// Ottieni un post per ID
-export const getPostById = async (postId) => {
-  const response = await fetch(`${API_URL}/${postId}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
-    },
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Errore durante il recupero del post");
-  }
-
-  return response.json();
-};
-
-// Elimina un post
+// DELETE POST
 export const deletePost = async (postId) => {
   const response = await fetch(`${API_URL}/${postId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${sessionStorage.getItem("token")}` // Aggiunto token JWT per autenticazione
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`, // Aggiunto token JWT per autenticazione
     },
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    throw new Error(errorData.message || "Errore durante l'eliminazione del post");
+    throw new Error(
+      errorData.message || "Errore durante l'eliminazione del post"
+    );
   }
 
   return response.json();
 };
-
-
-
-
-

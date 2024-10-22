@@ -1,9 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 
-// Crea il contesto
 export const AuthContext = createContext();
 
-// Provider per gestire lo stato di autenticazione
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -30,4 +28,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="colorfull md:sticky md:top-0 z-10 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo e nome del sito */}
+        {/* SINISTRA */}
         <div className="flex items-center">
           <img
             src="/assets/images/TU-TheoryUtenti-Logo.png"
@@ -15,7 +15,7 @@ export default function Navbar() {
           <span className="text-white text-2xl font-bold">Theory Utenti</span>
         </div>
 
-        {/* Link di navigazione */}
+        {/* DESTRA */}
         <div className="icons flex space-x-4">
           <Link
             to="/homepage"
